@@ -41,10 +41,10 @@ class Boy:
 class Idle:
     @staticmethod   #@는 데코레이드 같은 기능
     def enter(boy,e):
-        if left_up(e) or right_down(e):
+        if left_up(e) or right_down(e) or boy.dir == -1:
             boy.action = 2
             boy.face_dir = -1
-        elif right_up(e) or left_down(e) or start_event(e):
+        elif right_up(e) or left_down(e) or start_event(e) or boy.dir==1:
             boy.action = 3
             boy.face_dir = 1
         boy.dir = 0 #정지 상태
@@ -128,6 +128,10 @@ class AutoRun:
     def do(boy):
         boy.frame = (boy.frame + 1) % 8
         boy.x += boy.dir * 10
+        if boy.x +25 >=800:
+            boy.dir, boy.action = -1, 0
+        elif boy.x - 25 <= 0:
+            boy.dir, boy.action = 1, 1
         if get_time() - boy.start_time > 5:
             boy.state_machine.add_event(('TIME_OUT', 0))
         pass
