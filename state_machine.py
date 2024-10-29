@@ -1,11 +1,16 @@
 # 이벤트 체크 함수 정의
 # 상태 이벤트 e = (종류, 실제값) 튜플로 정의
-from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT
+from sdl2 import SDL_KEYDOWN, SDLK_SPACE, SDLK_RIGHT, SDL_KEYUP, SDLK_LEFT, SDLK_a
+
 
 def start_event(e):
     return e[0]=='START'
+
 def space_down(e): #e가 space down인지 판단? True or False
     return e[0] == 'INPUT' and e[1].type == SDL_KEYDOWN and e[1].key==SDLK_SPACE
+
+def a_down(e):
+    return e[0]=='INPUT' and e[1].type == SDL_KEYDOWN and e[1].key==SDLK_a
 
 def time_out(e): #e가 time out 인지 판단?
     return e[0] == 'TIME_OUT'

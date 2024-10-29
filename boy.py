@@ -1,7 +1,8 @@
 from pico2d import load_image, get_time
 from sdl2 import SDL_KEYDOWN, SDLK_SPACE
 
-from state_machine import StateMachine, time_out, space_down, right_down, left_up, left_down, right_up, start_event
+from state_machine import StateMachine, time_out, space_down, right_down, left_up, left_down, right_up, start_event, \
+    a_down
 
 
 class Boy:
@@ -17,8 +18,9 @@ class Boy:
         self.state_machine.start(Idle) #초기 상태가 Idle
         self.state_machine.set_transitions(
             {
-                Idle  : { right_down: Run, left_down: Run, left_up: Run, right_up: Run, time_out : Sleep },
+                Idle  : { a_down: AutoRun,right_down: Run, left_down: Run, left_up: Run, right_up: Run, time_out : Sleep },
                 Run : {right_down: Idle, left_down: Idle, right_up:Idle, left_up:Idle}, # Run 상태에서 어떤 이벤트가 들어와도 처리하지 않겠다.
+                AutoRun : {right_down: Run, left_down: Run, left_up: Run, right_up: Run, time_out: Idle },
                 Sleep : { right_down: Run, left_down: Run, left_up: Run, right_up: Run, space_down : Idle }
             }
         )
@@ -109,3 +111,23 @@ class Run:
     @staticmethod
     def draw(boy):
         boy.image.clip_draw(boy.frame*100,boy.action*100,100,100,boy.x,boy.y)
+
+class AutoRun:
+    @staticmethod
+    def enter(boy,e):
+        boy.start_time = get_time()
+        pass
+    @staticmethod
+    def exit(boy,e):
+        pass
+    @staticmethod
+    def do(boy):
+        boy.frame = (boy.frame + 1) % 8
+        boy.x += boy.dir * 10
+        if get_time() - boy.start_time > 5:
+            boy.state_machine.add_event(('TIME_OUT', 0))
+        pass
+    @staticmethod
+    def draw(boy):
+        boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y,150,150)
+        pass
