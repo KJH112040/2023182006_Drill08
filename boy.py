@@ -115,6 +115,10 @@ class Run:
 class AutoRun:
     @staticmethod
     def enter(boy,e):
+        if boy.face_dir==1:
+            boy.dir,boy.action=1,1
+        elif boy.face_dir==-1:
+            boy.dir,boy.action=-1,0
         boy.start_time = get_time()
         pass
     @staticmethod
@@ -129,5 +133,5 @@ class AutoRun:
         pass
     @staticmethod
     def draw(boy):
-        boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y,150,150)
+        boy.image.clip_draw(boy.frame * 100, boy.action * 100, 100, 100, boy.x, boy.y+25,150,150)
         pass
